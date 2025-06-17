@@ -17,7 +17,7 @@ class NatsConfig:
     @classmethod
     def from_env(cls, env: Env) -> Self:
         return cls(
-            url=env.get_string("URL", required=True),
+            url=env.get_string("SERVER_URL", required=True),
             subject_namespace=env.get_string("SUBJECT_NAMESPACE", required=True),
             stream_name=env.get_string("STREAM_NAME", required=True),
         )
