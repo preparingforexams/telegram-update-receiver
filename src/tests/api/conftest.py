@@ -10,7 +10,6 @@ def config() -> Config:
         app_version="",
         nats=NatsConfig(
             "http://localhost:4222",
-            subject_namespace="telegram",
             stream_name="telegram",
         ),
         secret_token="dummy",

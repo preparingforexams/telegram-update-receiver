@@ -4,5 +4,4 @@ metadata:
   name: config
 data:
   NATS_SERVER_URL: "nats://nats.nats-system:4222"
-  NATS_STREAM_NAME: "telegram"
-  NATS_SUBJECT_NAMESPACE: "telegram-updates"
+  NATS_STREAM_NAME: "telegram-updates"

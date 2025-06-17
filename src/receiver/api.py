@@ -6,7 +6,6 @@ from typing import Annotated
 from fastapi import FastAPI, Header, HTTPException, Request
 from fastapi.responses import RedirectResponse
 from nats.aio.client import Client
-from nats.js.errors import BadRequestError
 
 from receiver.config import init_config
 
@@ -33,17 +32,11 @@ app = FastAPI(lifespan=lifespan)
 
 async def publish(bot_name: str, update: bytes) -> None:
     jetstream = client.jetstream()
-
-    try:
-        await jetstream.publish(
-            subject=f"{config.nats.subject_namespace}.{bot_name}",
-            stream=config.nats.stream_name,
-            payload=update,
-        )
-    except BadRequestError as e:
-        if e.code == 400 and e.err_code == 10060:
-            _LOG.exception("Dropping update because consumer does not exist")
-        raise
+    await jetstream.publish(
+        subject=f"{config.nats.stream_name}.{bot_name}",
+        stream=config.nats.stream_name,
+        payload=update,
+    )
 
 
 @app.get("/", response_class=RedirectResponse)

@@ -11,14 +11,12 @@ _LOG = logging.getLogger(__name__)
 @dataclass(frozen=True)
 class NatsConfig:
     url: str
-    subject_namespace: str
     stream_name: str
 
     @classmethod
     def from_env(cls, env: Env) -> Self:
         return cls(
             url=env.get_string("SERVER_URL", required=True),
-            subject_namespace=env.get_string("SUBJECT_NAMESPACE", required=True),
             stream_name=env.get_string("STREAM_NAME", required=True),
         )
 
