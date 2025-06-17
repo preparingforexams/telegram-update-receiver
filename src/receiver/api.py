@@ -1,5 +1,6 @@
 import logging
 from contextlib import asynccontextmanager
+from http import HTTPStatus
 from typing import Annotated
 
 from fastapi import FastAPI, Header, HTTPException, Request
@@ -55,7 +56,10 @@ async def liveness_probe():
     return {"status": "ok"}
 
 
-@app.post("/update/{bot_name}")
+@app.post(
+    "/update/{bot_name}",
+    status_code=HTTPStatus.ACCEPTED,
+)
 async def receive_update(
     bot_name: str,
     token: Annotated[str, Header(title="X-Telegram-Bot-Api-Secret-Token")],
