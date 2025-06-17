@@ -1,13 +1,18 @@
 from fastapi.testclient import TestClient
 from pytest import fixture
 
-from receiver.config import Config
+from receiver.config import Config, NatsConfig
 
 
 @fixture()
 def config() -> Config:
     return Config(
         app_version="",
+        nats=NatsConfig(
+            "http://localhost:4222",
+            subject_namespace="telegram",
+            stream_name="telegram",
+        ),
         sentry_dsn="",
     )
 

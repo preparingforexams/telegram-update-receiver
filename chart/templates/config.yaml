@@ -3,8 +3,6 @@ kind: ConfigMap
 metadata:
   name: config
 data:
-  CLOUDFLARE_ZONE_ID: "{{ .Values.cloudflare.zoneId }}"
-  CLOUDFLARE_RECORD_TTL: "120"
-  PLEX_BASE_URL: "https://local-plex.is-ho.me"
-  STATE_KUBERNETES_NAMESPACE: {{ .Release.Namespace | quote }}
-  STATE_KUBERNETES_CONFIG_MAP: "cloudflare-dyndns-state"
+  NATS_SERVER_URL: "nats://nats.nats-system:4222"
+  NATS_STREAM_NAME: "telegram"
+  NATS_SUBJECT_NAMESPACE: "telegram-updates"

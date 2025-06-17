@@ -3,12 +3,12 @@ kind: Deployment
 metadata:
   name: api
 spec:
-  replicas: 2
+  replicas: 3
   revisionHistoryLimit: 0
   strategy:
     type: RollingUpdate
     rollingUpdate:
-      maxUnavailable: 50%
+      maxUnavailable: 1
       maxSurge: 100%
   selector:
     matchLabels:
@@ -18,7 +18,7 @@ spec:
       labels:
         app: api
     spec:
-      serviceAccountName: cloudflare-dyndns
+      serviceAccountName: update-receiver
       securityContext:
         seccompProfile:
           type: RuntimeDefault
@@ -42,7 +42,7 @@ spec:
               drop: [ ALL ]
           resources:
             requests:
-              cpu: 10m
+              cpu: 100m
               memory: 256Mi
             limits:
               cpu: "1"
@@ -52,8 +52,6 @@ spec:
           envFrom:
             - configMapRef:
                 name: config
-            - secretRef:
-                name: tokens
           startupProbe:
             httpGet:
               port: http
