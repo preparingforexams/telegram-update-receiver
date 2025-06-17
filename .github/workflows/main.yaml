@@ -36,19 +36,17 @@ jobs:
       packages: write
     uses: preparingforexams/actions-container/.github/workflows/build-dual-image-buildah.yml@v7
     with:
-      amd-runner-name: ubicloud-standard-2-ubuntu-2404
-      arm-runner-name: ubicloud-standard-2-arm-ubuntu-2404
       push-image: ${{ github.ref_name == github.event.repository.default_branch }}
 
   post-build-container-image:
-    runs-on: ubicloud-standard-2-ubuntu-2404
+    runs-on: ubuntu-24.04
     if: github.event_name == 'pull_request'
     needs: build-container-image
     steps:
       - run: echo "All images built"
 
   deploy:
-    runs-on: ubicloud-standard-2-ubuntu-2404
+    runs-on: ubuntu-24.04
     if: github.ref_name == github.event.repository.default_branch
     needs:
       - build-container-image
