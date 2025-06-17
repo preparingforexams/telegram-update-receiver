@@ -13,6 +13,7 @@ def config() -> Config:
             subject_namespace="telegram",
             stream_name="telegram",
         ),
+        secret_token="dummy",
         sentry_dsn="",
     )
 

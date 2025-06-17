@@ -27,6 +27,7 @@ class NatsConfig:
 class Config:
     app_version: str
     nats: NatsConfig
+    secret_token: str
     sentry_dsn: str | None
 
     @classmethod
@@ -34,6 +35,7 @@ class Config:
         return cls(
             app_version=env.get_string("APP_VERSION", default="dev"),
             nats=NatsConfig.from_env(env.scoped("NATS_")),
+            secret_token=env.get_string("SECRET_TOKEN", required=True),
             sentry_dsn=env.get_string("SENTRY_DSN"),
         )
 
