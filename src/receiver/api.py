@@ -1,9 +1,8 @@
 import logging
 from contextlib import asynccontextmanager
-from http import HTTPStatus
 from typing import Annotated
 
-from fastapi import FastAPI, Header, HTTPException, Request, Response
+from fastapi import FastAPI, Header, HTTPException, Request, Response, status
 from fastapi.responses import RedirectResponse
 from nats.aio.client import Client
 
@@ -51,7 +50,7 @@ async def liveness_probe():
 
 @app.post(
     "/update/{bot_name}",
-    status_code=HTTPStatus.ACCEPTED,
+    status_code=status.HTTP_202_ACCEPTED,
     response_class=Response,
 )
 async def receive_update(
