@@ -1,0 +1,70 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: api
+spec:
+  replicas: 2
+  revisionHistoryLimit: 0
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 50%
+      maxSurge: 100%
+  selector:
+    matchLabels:
+      app: api
+  template:
+    metadata:
+      labels:
+        app: api
+    spec:
+      serviceAccountName: cloudflare-dyndns
+      securityContext:
+        seccompProfile:
+          type: RuntimeDefault
+        runAsNonRoot: true
+      affinity:
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            - topologyKey: kubernetes.io/hostname
+              labelSelector:
+                matchLabels:
+                  app: api
+      containers:
+        - name: api
+          image: "{{ .Values.image.name }}:{{ .Values.appVersion }}"
+          args:
+            - "--log-level"
+            - "warning"
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop: [ ALL ]
+          resources:
+            requests:
+              cpu: 10m
+              memory: 256Mi
+            limits:
+              cpu: "1"
+          ports:
+            - containerPort: 8000
+              name: http
+          envFrom:
+            - configMapRef:
+                name: config
+            - secretRef:
+                name: tokens
+          startupProbe:
+            httpGet:
+              port: http
+              path: /probe/live
+            initialDelaySeconds: 15
+            failureThreshold: 10
+          livenessProbe:
+            httpGet:
+              port: http
+              path: /probe/live
+          readinessProbe:
+            httpGet:
+              port: http
+              path: /probe/live

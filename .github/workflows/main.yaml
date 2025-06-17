@@ -1,0 +1,69 @@
+name: Main
+on:
+  push:
+    branches: [ main ]
+  pull_request: { }
+
+permissions:
+  contents: read
+
+jobs:
+  required-meta:
+    permissions:
+      contents: read
+      checks: write
+      pull-requests: write
+    uses: BlindfoldedSurgery/actions-meta/.github/workflows/required.yml@v1
+
+  lint:
+    uses: BlindfoldedSurgery/actions-python/.github/workflows/lint.yml@v5
+    with:
+      build-tool: uv
+      python-version: '3.13'
+
+  test:
+    uses: BlindfoldedSurgery/actions-python/.github/workflows/test.yml@v5
+    with:
+      build-tool: uv
+      python-version: '3.13'
+
+  build-container-image:
+    needs:
+      - lint
+      - test
+    permissions:
+      contents: read
+      packages: write
+    uses: preparingforexams/actions-container/.github/workflows/build-dual-image-buildah.yml@v7
+    with:
+      amd-runner-name: ubicloud-standard-2-ubuntu-2404
+      arm-runner-name: ubicloud-standard-2-arm-ubuntu-2404
+      push-image: ${{ github.ref_name == github.event.repository.default_branch }}
+
+  post-build-container-image:
+    runs-on: ubicloud-standard-2-ubuntu-2404
+    if: github.event_name == 'pull_request'
+    needs: build-container-image
+    steps:
+      - run: echo "All images built"
+
+  deploy:
+    runs-on: ubicloud-standard-2-ubuntu-2404
+    if: github.ref_name == github.event.repository.default_branch
+    needs:
+      - build-container-image
+    permissions:
+      contents: write
+      pull-requests: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - run: git push origin main:release
+
+  clean:
+    concurrency: cleanup
+    needs: [ deploy ]
+    permissions:
+      packages: write
+    uses: preparingforexams/actions-container/.github/workflows/clean.yml@v7

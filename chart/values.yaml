@@ -1,0 +1,15 @@
+appVersion: REPLACEME
+cloudflare:
+  zoneId: dd0453759d1cd93c2fdd574a7b5dc513
+image:
+  name: ghcr.io/bjoernpetersen/cloudflare-dyndns
+ingress:
+  host: dyndns.bjoernpetersen.net
+  certificate:
+    issuer: zerossl
+    algorithm: ECDSA
+cronJobs:
+  - schedule: "*/30 * * * *"
+    name: update-cloudflare
+  - schedule: "10 * * * *"
+    name: update-plex
