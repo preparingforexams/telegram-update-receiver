@@ -2,7 +2,7 @@ appVersion: REPLACEME
 image:
   name: ghcr.io/preparingforexams/telegram-update-receiver
 ingress:
-  host: telegram.is-ho.me
+  host: telegram-direct.is-ho.me
   certificate:
     issuer: zerossl
     algorithm: ECDSA
