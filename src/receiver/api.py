@@ -5,6 +5,7 @@ from typing import Annotated
 from fastapi import (
     FastAPI,
     HTTPException,
+    Request,
     Response,
     Security,
     status,
@@ -69,7 +70,7 @@ async def liveness_probe():
 async def receive_update(
     bot_name: str,
     _: Annotated[None, Security(verify_telegram_token)],
-    body: bytes,
+    request: Request,
 ) -> Response:
-    await publish(bot_name, body)
+    await publish(bot_name, await request.body())
     return Response(status_code=status.HTTP_202_ACCEPTED)
