@@ -2,8 +2,16 @@ import logging
 from contextlib import asynccontextmanager
 from typing import Annotated
 
-from fastapi import FastAPI, Header, HTTPException, Request, Response, status
+from fastapi import (
+    Body,
+    FastAPI,
+    HTTPException,
+    Response,
+    Security,
+    status,
+)
 from fastapi.responses import RedirectResponse
+from fastapi.security.api_key import APIKeyHeader
 from nats.aio.client import Client
 
 from receiver.config import init_config
@@ -26,7 +34,13 @@ async def lifespan(app: FastAPI):
     await client.close()
 
 
+api_key_header = APIKeyHeader(name="X-Telegram-Bot-Api-Secret-Token")
 app = FastAPI(lifespan=lifespan)
+
+
+async def verify_telegram_token(token: str = Security(api_key_header)) -> None:
+    if token != config.secret_token:
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED)
 
 
 async def publish(bot_name: str, update: bytes) -> None:
@@ -55,12 +69,8 @@ async def liveness_probe():
 )
 async def receive_update(
     bot_name: str,
-    token: Annotated[str, Header(title="X-Telegram-Bot-Api-Secret-Token")],
-    request: Request,
+    _: Annotated[None, Security(verify_telegram_token)],
+    body: Annotated[bytes, Body(embed=False, media_type="application/json")],
 ) -> Response:
-    if token != config.secret_token:
-        raise HTTPException(status_code=401)
-
-    await publish(bot_name, await request.body())
-
+    await publish(bot_name, body)
     return Response(status_code=status.HTTP_202_ACCEPTED)
