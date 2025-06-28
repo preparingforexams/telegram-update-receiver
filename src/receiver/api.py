@@ -29,6 +29,8 @@ async def lifespan(app: FastAPI):
         allow_reconnect=True,
     )
 
+    _LOG.info("Connected to NATS")
+
     yield
 
     await client.close()
@@ -44,6 +46,7 @@ async def verify_telegram_token(token: str = Security(api_key_header)) -> None:
 
 
 async def publish(bot_name: str, update: bytes) -> None:
+    _LOG.debug("Publishing update for bot %s", bot_name)
     jetstream = client.jetstream()
     await jetstream.publish(
         subject=f"{config.nats.stream_name}.{bot_name}",
