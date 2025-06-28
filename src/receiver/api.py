@@ -3,7 +3,6 @@ from contextlib import asynccontextmanager
 from typing import Annotated
 
 from fastapi import (
-    Body,
     FastAPI,
     HTTPException,
     Response,
@@ -70,7 +69,7 @@ async def liveness_probe():
 async def receive_update(
     bot_name: str,
     _: Annotated[None, Security(verify_telegram_token)],
-    body: Annotated[bytes, Body(embed=False, media_type="application/json")],
+    body: bytes,
 ) -> Response:
     await publish(bot_name, body)
     return Response(status_code=status.HTTP_202_ACCEPTED)
