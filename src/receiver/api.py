@@ -57,8 +57,10 @@ async def receive_update(
     bot_name: str,
     token: Annotated[str, Header(title="X-Telegram-Bot-Api-Secret-Token")],
     request: Request,
-) -> None:
+) -> Response:
     if token != config.secret_token:
         raise HTTPException(status_code=401)
 
     await publish(bot_name, await request.body())
+
+    return Response(status_code=status.HTTP_202_ACCEPTED)
