@@ -35,7 +35,7 @@ spec:
           image: "{{ .Values.image.name }}:{{ .Values.appVersion }}"
           args:
             - "--log-level"
-            - "warning"
+            - "debug"
           securityContext:
             allowPrivilegeEscalation: false
             capabilities:
