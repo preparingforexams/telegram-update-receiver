@@ -50,6 +50,8 @@ spec:
             - containerPort: 8000
               name: http
           envFrom:
+            - configMapRef:
+                name: bot-configs
             - secretRef:
                 name: secrets
           startupProbe:

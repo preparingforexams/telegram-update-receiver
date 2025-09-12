@@ -1,3 +1,4 @@
+from bs_config import Env
 from fastapi.testclient import TestClient
 from pytest import fixture
 
@@ -7,6 +8,7 @@ from receiver.config import Config, NatsConfig
 @fixture()
 def config() -> Config:
     return Config(
+        _bot_configs=Env.load_from_dict({}),
         app_version="",
         nats=NatsConfig(
             "http://localhost:4222",

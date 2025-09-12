@@ -6,3 +6,7 @@ ingress:
   certificate:
     issuer: zerossl
     algorithm: ECDSA
+
+botConfigs:
+  video-reverse:
+    - "message.video"

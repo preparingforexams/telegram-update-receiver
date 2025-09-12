@@ -1,6 +1,7 @@
+import json
 import logging
 from contextlib import asynccontextmanager
-from typing import Annotated
+from typing import Annotated, Any
 
 from fastapi import (
     FastAPI,
@@ -55,6 +56,32 @@ async def publish(bot_name: str, update: bytes) -> None:
     )
 
 
+def _has_key(update: dict[str, Any], key: str) -> bool:
+    parts = key.split(".")
+
+    current: dict[str, Any] | Any = update
+    for part in parts:
+        if not isinstance(current, dict):
+            return False
+
+        value = current.get(part)
+        if value is None:
+            return False
+
+        current = value
+
+    return True
+
+
+def _is_allowed(*, bot_name: str, body: bytes) -> bool:
+    required_keys = config.get_required_keys(bot_name)
+    if not required_keys:
+        return True
+
+    update = json.loads(body.decode("utf-8"))
+    return all(_has_key(update, key) for key in required_keys)
+
+
 @app.get("/", response_class=RedirectResponse)
 async def redirect_to_docs():
     return RedirectResponse("/docs")
@@ -75,5 +102,9 @@ async def receive_update(
     _: Annotated[None, Security(verify_telegram_token)],
     request: Request,
 ) -> Response:
-    await publish(bot_name, await request.body())
+    body = await request.body()
+
+    if _is_allowed(bot_name=bot_name, body=body):
+        await publish(bot_name, body)
+
     return Response(status_code=status.HTTP_202_ACCEPTED)

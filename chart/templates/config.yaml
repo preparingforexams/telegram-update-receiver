@@ -1,0 +1,9 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: bot-configs
+data:
+  {{- range $botName, $keys := .Values.botConfigs }}
+  {{ printf "BOT_CONFIG_%s" $botName }}: {{ join "," $keys | quote }}
+  {{- end }}
