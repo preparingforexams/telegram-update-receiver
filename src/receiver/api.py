@@ -106,5 +106,7 @@ async def receive_update(
 
     if _is_allowed(bot_name=bot_name, body=body):
         await publish(bot_name, body)
+    else:
+        _LOG.debug("Update for bot %s was filtered out", bot_name)
 
     return Response(status_code=status.HTTP_202_ACCEPTED)
