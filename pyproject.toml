@@ -16,7 +16,7 @@ dependencies = [
     "nats-py ==2.11.0",
     "pydantic ==2.11.*",
     "sentry-sdk >=2.0.0, <3.0.0",
-    "uvicorn[standard] ==0.35.*",
+    "uvicorn[standard] ==0.36.*",
 ]
 
 [dependency-groups]
