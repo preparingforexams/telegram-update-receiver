@@ -16,8 +16,8 @@ class NatsConfig:
     @classmethod
     def from_env(cls, env: Env) -> Self:
         return cls(
-            url=env.get_string("SERVER_URL", required=True),
-            stream_name=env.get_string("STREAM_NAME", required=True),
+            url=env.get_string("server-url", required=True),
+            stream_name=env.get_string("stream-name", required=True),
         )
 
 
@@ -36,11 +36,11 @@ class Config:
     @classmethod
     def from_env(cls, env: Env) -> Self:
         return cls(
-            _bot_configs=env.scoped("BOT_CONFIG_"),
-            app_version=env.get_string("APP_VERSION", default="dev"),
-            nats=NatsConfig.from_env(env.scoped("NATS_")),
-            secret_token=env.get_string("SECRET_TOKEN", required=True),
-            sentry_dsn=env.get_string("SENTRY_DSN"),
+            _bot_configs=env / "bot-config",
+            app_version=env.get_string("app-version", default="dev"),
+            nats=NatsConfig.from_env(env / "nats"),
+            secret_token=env.get_string("secret-token", required=True),
+            sentry_dsn=env.get_string("sentry-dsn"),
         )
 
 
