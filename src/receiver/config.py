@@ -8,7 +8,7 @@ from bs_config import Env
 _LOG = logging.getLogger(__name__)
 
 
-@dataclass(frozen=True)
+@dataclass(frozen=True, kw_only=True)
 class NatsConfig:
     url: str
     stream_name: str
@@ -21,7 +21,7 @@ class NatsConfig:
         )
 
 
-@dataclass(frozen=True)
+@dataclass(frozen=True, kw_only=True)
 class Config:
     _bot_configs: Env
 

@@ -11,7 +11,7 @@ def config() -> Config:
         _bot_configs=Env.load_from_dict({}),
         app_version="",
         nats=NatsConfig(
-            "http://localhost:4222",
+            url="http://localhost:4222",
             stream_name="telegram",
         ),
         secret_token="dummy",
