@@ -8,5 +8,5 @@ ingress:
     algorithm: ECDSA
 
 botConfigs:
-  VIDEO_REVERSE:
+  video-reverse:
     - "message.video"

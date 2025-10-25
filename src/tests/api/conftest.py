@@ -1,4 +1,5 @@
-from bs_config import Env
+from pathlib import Path
+
 from fastapi.testclient import TestClient
 from pytest import fixture
 
@@ -8,8 +9,8 @@ from receiver.config import Config, NatsConfig
 @fixture()
 def config() -> Config:
     return Config(
-        _bot_configs=Env.load_from_dict({}),
         app_version="",
+        bot_config_path=Path("bot-config.toml"),
         nats=NatsConfig(
             url="http://localhost:4222",
             stream_name="telegram",

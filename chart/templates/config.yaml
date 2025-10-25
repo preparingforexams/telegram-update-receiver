@@ -4,6 +4,12 @@ kind: ConfigMap
 metadata:
   name: bot-configs
 data:
-  {{- range $botName, $keys := .Values.botConfigs }}
-  {{ printf "BOT_CONFIG__%s" $botName }}: {{ join "," $keys | quote }}
-  {{- end }}
+  config.toml: |
+    {{- range $botName, $keys := .Values.botConfigs }}
+    [bot-config."{{ $botName }}"]
+    required-keys = [
+      {{- range $key := $keys }}
+      "{{ $key }}",
+      {{- end }}
+    ]
+    {{- end }}

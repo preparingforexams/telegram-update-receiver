@@ -23,6 +23,7 @@ spec:
         seccompProfile:
           type: RuntimeDefault
         runAsNonRoot: true
+        fsGroup: 1000
       affinity:
         podAntiAffinity:
           requiredDuringSchedulingIgnoredDuringExecution:
@@ -30,6 +31,10 @@ spec:
               labelSelector:
                 matchLabels:
                   app: api
+      volumes:
+        - name: bot-configs
+          configMap:
+            name: bot-configs
       containers:
         - name: api
           image: "{{ .Values.image.name }}:{{ .Values.appVersion }}"
@@ -49,9 +54,13 @@ spec:
           ports:
             - containerPort: 8000
               name: http
+          volumeMounts:
+            - mountPath: /etc/prep-update-receiver
+              name: bot-configs
+          env:
+            - name: BOT_CONFIG_PATH
+              value: /etc/prep-update-receiver/config.toml
           envFrom:
-            - configMapRef:
-                name: bot-configs
             - secretRef:
                 name: secrets
           startupProbe:
