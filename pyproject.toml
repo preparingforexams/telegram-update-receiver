@@ -24,7 +24,7 @@ dev = [
     "mypy ==1.18.*",
     "pytest ==9.0.*",
     "pytest-mock >=3.0.0, <4.0.0",
-    "ruff ==0.14.6",
+    "ruff ==0.14.7",
 ]
 
 [[tool.uv.index]]
