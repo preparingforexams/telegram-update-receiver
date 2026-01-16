@@ -34,11 +34,11 @@ wheels = [
 
 [[package]]
 name = "bs-config"
-version = "3.4.0"
-source = { registry = "https://pypi.bjoernpetersen.net/" }
-sdist = { url = "https://pypi.bjoernpetersen.net/packages/bs_config-3.4.0.tar.gz", hash = "sha256:93b8a630f370be52e4b8106f1bcb0059857cdc43d43c6efed1a3f6d8f0699460" }
+version = "4.0.0"
+source = { registry = "https://code.bjoernpetersen.net/api/packages/BjoernPetersen/pypi/simple" }
+sdist = { url = "https://code.bjoernpetersen.net/api/packages/BjoernPetersen/pypi/files/bs-config/4.0.0/bs_config-4.0.0.tar.gz", hash = "sha256:bc7b2338b8a6a2d7701ed1eefd22fd79982be3173b759601c8fc99ea361ac807" }
 wheels = [
-    { url = "https://pypi.bjoernpetersen.net/packages/bs_config-3.4.0-py3-none-any.whl", hash = "sha256:036c5e3b60bd4a6eac7e0e52045e63261a0734c3cab4043caeb44f73032dbe5f" },
+    { url = "https://code.bjoernpetersen.net/api/packages/BjoernPetersen/pypi/files/bs-config/4.0.0/bs_config-4.0.0-py3-none-any.whl", hash = "sha256:a1652749c1367045e4de0720f3fe084c8518d14c710861e593dd7b10ca3516e5" },
 ]
 
 [package.optional-dependencies]
@@ -404,7 +404,7 @@ dev = [
 
 [package.metadata]
 requires-dist = [
-    { name = "bs-config", extras = ["dotenv"], specifier = "==3.4.0", index = "https://pypi.bjoernpetersen.net/" },
+    { name = "bs-config", extras = ["dotenv"], specifier = "==4.0.0", index = "https://code.bjoernpetersen.net/api/packages/BjoernPetersen/pypi/simple" },
     { name = "fastapi", specifier = "==0.128.0" },
     { name = "httpx", specifier = "==0.28.*" },
     { name = "nats-py", specifier = "==2.12.0" },
